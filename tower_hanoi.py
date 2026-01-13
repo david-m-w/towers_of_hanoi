@@ -1,3 +1,6 @@
+class IllegalMove(Exception):
+    pass
+
 class game:
     def __init__(self, rings):
         self.rings = rings
@@ -33,10 +36,48 @@ class game:
 
         return ascii_image
     
-    def move(self):
-        pass
+    def move(self, origin, target):
+        if origin == target:
+            raise IllegalMove
+        
+        origin_size = 0
+        for i in range(self.rings):
+            if self.towers[origin][i] != 0:
+                origin_size = self.towers[origin][i]
+                origin_position = i
+                break
+        if origin_size == 0:
+            raise IllegalMove
+        
+        target_size = 0
+        target_position = 0
+        for i in range(self.rings):
+            if self.towers[target][i] != 0:
+                target_position = i
+                target_size = self.towers[target][i]
+                break
+        
+        if target_size != 0 and target_size < origin_size:
+            raise IllegalMove
+        
+        self.towers[target][target_position -1] = origin_size
+        self.towers[origin][origin_position] = 0
 
 
 
 a = game(3)
+print(a)
+a.move(0, 2)
+print(a)
+a.move(0, 1)
+print(a)
+a.move(2, 1)
+print(a)
+a.move(0, 2)
+print(a)
+a.move(1, 0)
+print(a)
+a.move(1, 2)
+print(a)
+a.move(0, 2)
 print(a)
