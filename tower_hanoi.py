@@ -79,12 +79,17 @@ class game:
             
             try:
                 self.move(origin, target)
+                moves += 1
             except IllegalMove:
                 print("Illegal move played.")
                 print()
                 continue
         
-        print("Game finished:")
+        print(f"Game finished in {moves} moves:")
+        if moves == 2**self.rings -1:
+            print("Congratulation, you have found the optimal solution!")
+        else:
+            print(f"You're {self,moves - (2**n - 1)} moves away from the optimal solution.")
         print(self)
         print()
 
