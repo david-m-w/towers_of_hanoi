@@ -1,3 +1,6 @@
+import sys
+import os
+
 class IllegalMove(Exception):
     pass
 
@@ -65,7 +68,13 @@ class game:
         self.towers[target][target_position -1] = origin_size
         self.towers[origin][origin_position] = 0
     
-    def play_normal(self, target_tower = 2, print_state = True):
+    def play_normal(self, target_tower = 2, print_ui = True):
+
+
+        if not print_ui:
+            old_stdout = sys.stdout # backup current stdout
+            sys.stdout = open(os.devnull, "w")
+
         moves = 0
         while self.towers[target_tower] != list(range(self.rings)):
             print("State:")
@@ -92,6 +101,11 @@ class game:
             print(f"You're {self,moves - (2**n - 1)} moves away from the optimal solution.")
         print(self)
         print()
+
+        if not print_ui:
+            sys.stdout = old_stdout # reset old stdout
+
+        return true
 
 
 
