@@ -37,6 +37,8 @@ class game:
         return ascii_image
     
     def move(self, origin, target):
+        if origin not in [0,1,2] or target not in [0,1,2]:
+            raise IllegalMove
         if origin == target:
             raise IllegalMove
         
@@ -61,7 +63,32 @@ class game:
             raise IllegalMove
         
         self.towers[target][target_position -1] = origin_size
-        self.towers[origin][origin_position] = 0
+        self.towers[origin][origin_position] = 
+    
+    def play_normal(self, target_tower = 2, print_state = True):
+        move count = 0
+        while self.towers[target_tower] != list(range(self.rings)):
+            print("State:")
+            print(self)
+            try:
+                origin, target = map(int, input("Next Move: ").split(" "))
+            except:
+                print("Move not recognized")
+                print()
+                continue
+            
+            try:
+                self.move(origin, target)
+            except IllegalMove:
+                print("Illegal move played.")
+                print()
+                continue
+        
+        print("Game finished:")
+        print(self)
+        print()
+
+
 
 
 
