@@ -35,7 +35,6 @@ class game:
             ascii_image += "\n"
 
         ascii_image += "="*(self.rings * 6 + 5)
-        ascii_image += "\n"
 
         return ascii_image
     
@@ -68,19 +67,27 @@ class game:
         self.towers[target][target_position -1] = origin_size
         self.towers[origin][origin_position] = 0
     
+    
     def play_normal(self, target_tower = 2, print_ui = True):
-
-
         if not print_ui:
             old_stdout = sys.stdout # backup current stdout
             sys.stdout = open(os.devnull, "w")
-
+        
+        print("Enter the number of the tower from wich you wanna move a ring and then the number of the tower where you want to move it to. Numbering starts at 0.")
+        print()
+        
         moves = 0
-        while self.towers[target_tower] != list(range(self.rings)):
+        while self.towers[target_tower] != list(range(1, self.rings + 1)):
             print("State:")
             print(self)
+            
+            user_input = input("Next Move: ")
+            
+            if user_input == "c":
+                return "aborted by user"
+            
             try:
-                origin, target = map(int, input("Next Move: ").split(" "))
+                origin, target = map(int, user_input.split(" "))
             except:
                 print("Move not recognized")
                 print()
@@ -89,6 +96,7 @@ class game:
             try:
                 self.move(origin, target)
                 moves += 1
+                print()
             except IllegalMove:
                 print("Illegal move played.")
                 print()
@@ -98,32 +106,18 @@ class game:
         if moves == 2**self.rings -1:
             print("Congratulation, you have found the optimal solution!")
         else:
-            print(f"You're {self,moves - (2**n - 1)} moves away from the optimal solution.")
+            print(f"You're {self,moves - (2**self.rings - 1)} moves away from the optimal solution.")
         print(self)
         print()
 
         if not print_ui:
             sys.stdout = old_stdout # reset old stdout
 
-        return true
+        return True
 
 
 
 
 
 a = game(3)
-print(a)
-a.move(0, 2)
-print(a)
-a.move(0, 1)
-print(a)
-a.move(2, 1)
-print(a)
-a.move(0, 2)
-print(a)
-a.move(1, 0)
-print(a)
-a.move(1, 2)
-print(a)
-a.move(0, 2)
-print(a)
+a.play_normal()
