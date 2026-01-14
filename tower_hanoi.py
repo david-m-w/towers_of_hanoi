@@ -66,7 +66,7 @@ class game:
         self.towers[origin][origin_position] = 0
     
     def play_normal(self, target_tower = 2, print_state = True):
-        move count = 0
+        moves = 0
         while self.towers[target_tower] != list(range(self.rings)):
             print("State:")
             print(self)
