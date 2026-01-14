@@ -63,7 +63,7 @@ class game:
             raise IllegalMove
         
         self.towers[target][target_position -1] = origin_size
-        self.towers[origin][origin_position] = 
+        self.towers[origin][origin_position] = 0
     
     def play_normal(self, target_tower = 2, print_state = True):
         move count = 0
