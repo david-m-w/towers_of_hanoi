@@ -1,0 +1,12 @@
+agent for normal game (3 towers)
+n tower testing
+n tower and m rings formula for optimal solution
+game with randomized start (stil legal, maybe not leagal starting pos.
+maybe a non legal positions is not solvable?
+maybe randomized positions, even when legal, are non solvable sometimes?)
+agent to play n towers
+agent to play n towers randomized
+make the __str__ function capable of higlighting a tower (like the target tower)
+maybe for that make a variable in the class that marks the target tower.
+and a function to change it
+also maybe add functions to reset or randomize the gamestate, or set a custom one
