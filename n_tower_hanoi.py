@@ -81,6 +81,15 @@ class game:
                 for i in range(self.tower_amount):
                     self.towers[i] = [0]*(self.rings - len(self.towers[i])) + self.towers[i]
             
+            case "total_random":
+                self.towers = [[] for _ in range(self.tower_amount)]
+                rings_shuffeld = list(range(1, self.rings + 1))
+                r.shuffle(rings_shuffeld)
+                for ring in rings_shuffeld:
+                    self.towers[r.randint(0, self.tower_amount-1)].append(ring)
+                for i in range(self.tower_amount):
+                    self.towers[i] = [0]*(self.rings - len(self.towers[i])) + self.towers[i]
+            
             case _:
                 raise SyntaxError
     
@@ -112,7 +121,6 @@ class game:
         
         self.towers[target][target_position -1] = origin_size
         self.towers[origin][origin_position] = 0
-    
     
     def play_normal(self, print_ui = True):
         if self.target == None:
@@ -172,7 +180,7 @@ class game:
 
 
 
-a = game(5, 6, 3, state="random_illegal_on_purpose")
+a = game(12, 6, 3, state="total_random")
 print(a)
 
 """
