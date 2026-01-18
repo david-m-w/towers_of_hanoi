@@ -1,18 +1,21 @@
 import sys
 import os
+import random as r
 
 class IllegalMove(Exception):
     pass
+class TargetOutOfBounds(Exception):
+    pass
+class TargetNotSet(Exception):
+    pass
+
 
 class game:
-    def __init__(self, rings, tower_amount):
+    def __init__(self, rings, tower_amount, target = None, state = "default"):
         self.rings = rings
         self.tower_amount = tower_amount
-        self.towers = [
-            list(range(1, rings + 1)),
-            *[[0]*rings for _ in range (tower_amount - 1)]
-        ]
-        #print(self.towers)
+        self.set_target(target)
+        self.set_gamestate(state)
     
     def __str__(self):
         ascii_image = ""
@@ -34,9 +37,52 @@ class game:
                 ascii_image += " "
             ascii_image += "\n"
 
-        ascii_image += "="*(self.rings * 2 * self,tower_amount + (2 * self.tower_amount - 1))
+        if self.target == None:
+            ascii_image += "="*(self.rings * 2 * self.tower_amount + (2 * self.tower_amount - 1))
+        else:
+            ascii_image += "="*(self.rings * 2 * self.target + (2 * self.target))
+            ascii_image += "#"*(self.rings * 2 + 1)
+            ascii_image += "="*(self.rings * 2 * (self.tower_amount - self.target - 1) + (2 * (self.tower_amount - self.target - 1)))
 
         return ascii_image
+    
+    def set_target(self, target):
+        if target < 0 or target >= self.tower_amount:
+            raise TargetOutOfBounds
+        self.target = target
+    
+    def set_gamestate(self, state):
+        match state:
+            case "default":
+                self.towers = [
+                    list(range(1, self.rings + 1)),
+                    *[[0]*self.rings for _ in range (self.tower_amount - 1)]
+                ]
+            
+            case "default_illegal":
+                self.towers = [
+                    list(range(self.rings, 0, -1)),
+                    *[[0]*self.rings for _ in range (self.tower_amount - 1)]
+                ]
+            
+            case "random_legal":
+                self.towers = [[] for _ in range(self.tower_amount)]
+                for ring in range(1, self.rings + 1):
+                    self.towers[r.randint(0, self.tower_amount-1)].append(ring)
+                for i in range(self.tower_amount):
+                    self.towers[i] = [0]*(self.rings - len(self.towers[i])) + self.towers[i]
+            
+            case "random_illegal_on_purpose":
+                self.towers = [[] for _ in range(self.tower_amount)]
+                for ring in range(1, self.rings + 1):
+                    self.towers[r.randint(0, self.tower_amount-1)].append(ring)
+                for i in range(self.tower_amount):
+                    self.towers[i].reverse()
+                for i in range(self.tower_amount):
+                    self.towers[i] = [0]*(self.rings - len(self.towers[i])) + self.towers[i]
+            
+            case _:
+                raise SyntaxError
     
     def move(self, origin, target):
         if origin not in list(range(self.tower_amount)) or target not in list(range(self.tower_amount)):
@@ -68,7 +114,10 @@ class game:
         self.towers[origin][origin_position] = 0
     
     
-    def play_normal(self, target_tower, print_ui = True):
+    def play_normal(self, print_ui = True):
+        if self.target == None:
+            raise TargetNotSet
+        
         if not print_ui:
             old_stdout = sys.stdout # backup current stdout
             sys.stdout = open(os.devnull, "w")
@@ -77,9 +126,10 @@ class game:
         print()
         
         moves = 0
-        while self.towers[target_tower] != list(range(1, self.rings + 1)):
+        while self.towers[self.target] != list(range(1, self.rings + 1)):
             print("State:")
             print(self)
+            print(f"Moves used: {moves}")
             
             user_input = input("Next Move: ")
             
@@ -122,5 +172,36 @@ class game:
 
 
 
-a = game(3)
-a.play_normal()
+a = game(5, 6, 3, state="random_illegal_on_purpose")
+print(a)
+
+"""
+
+1, 4, 3
+0, 3
+
+2, 4, 3
+0, 1
+0, 3
+1, 3
+
+3, 4, 3
+0, 1
+0, 2
+0, 3
+2, 3
+1, 3
+
+4, 4, 3
+0, 1
+0, 2
+1, 2
+0, 1
+0, 3
+1, 3
+2, 1
+2, 3
+1, 3
+
+
+"""
