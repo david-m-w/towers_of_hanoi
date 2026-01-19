@@ -1,7 +1,6 @@
 agent for normal game (3 towers)
 n tower testing
 n tower and m rings formula for optimal solution
-game with randomized start (stil legal, maybe not leagal starting pos.
 maybe a non legal positions is not solvable?
 maybe randomized positions, even when legal, are non solvable sometimes?)
 agent to play n towers

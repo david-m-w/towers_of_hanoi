@@ -180,7 +180,7 @@ class game:
 
 
 
-a = game(12, 6, 3, state="total_random")
+a = game(12, 6, 3)
 print(a)
 
 """
@@ -210,6 +210,9 @@ print(a)
 2, 1
 2, 3
 1, 3
+
+5, 4, 3
+
 
 
 """
